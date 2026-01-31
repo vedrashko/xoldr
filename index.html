@@ -3,10 +3,781 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>xoldr - Password Generator</title>
+    <title>xoldr - Free Secure Password Generator</title>
+    <meta name="description" content="Generate strong, secure passwords instantly. Free online password generator with customizable length and character options.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0a0b;
+            --bg-secondary: #111113;
+            --bg-tertiary: #1a1a1d;
+            --border-color: #2a2a2d;
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0a5;
+            --text-muted: #606065;
+            --accent: #00d4aa;
+            --accent-dim: rgba(0, 212, 170, 0.1);
+            --accent-glow: rgba(0, 212, 170, 0.3);
+            --danger: #ff4757;
+            --warning: #ffa502;
+            --success: #00d4aa;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        /* Subtle grid background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .container {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .tagline {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            font-weight: 300;
+        }
+
+        /* Generator Card */
+        .generator-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 32px;
+            margin-bottom: 32px;
+        }
+
+        /* Password Display */
+        .password-display {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 24px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .password-display::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .password-display.copied::before {
+            opacity: 1;
+        }
+
+        .password-text {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.4rem;
+            word-break: break-all;
+            min-height: 2em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: var(--text-primary);
+            letter-spacing: 0.05em;
+        }
+
+        .password-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 14px 24px;
+            border: none;
+            border-radius: 10px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: var(--bg-primary);
+        }
+
+        .btn-primary:hover {
+            background: #00eabb;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 20px var(--accent-glow);
+        }
+
+        .btn-secondary {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            background: var(--border-color);
+            transform: translateY(-1px);
+        }
+
+        .btn svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        /* Controls */
+        .controls {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .control-label {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .control-label span {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .control-label strong {
+            color: var(--text-primary);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1rem;
+        }
+
+        /* Range Slider */
+        .range-slider {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 100%;
+            height: 6px;
+            background: var(--bg-tertiary);
+            border-radius: 3px;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .range-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            background: var(--accent);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .range-slider::-webkit-slider-thumb:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 15px var(--accent-glow);
+        }
+
+        .range-slider::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            background: var(--accent);
+            border-radius: 50%;
+            cursor: pointer;
+            border: none;
+        }
+
+        /* Checkboxes */
+        .checkbox-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 16px;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .checkbox-item:hover {
+            border-color: var(--text-muted);
+        }
+
+        .checkbox-item.active {
+            border-color: var(--accent);
+            background: var(--accent-dim);
+        }
+
+        .checkbox-item input {
+            display: none;
+        }
+
+        .checkbox-box {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--border-color);
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            flex-shrink: 0;
+        }
+
+        .checkbox-item.active .checkbox-box {
+            background: var(--accent);
+            border-color: var(--accent);
+        }
+
+        .checkbox-box svg {
+            width: 12px;
+            height: 12px;
+            stroke: var(--bg-primary);
+            stroke-width: 3;
+            opacity: 0;
+            transform: scale(0);
+            transition: all 0.2s;
+        }
+
+        .checkbox-item.active .checkbox-box svg {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .checkbox-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .checkbox-item.active .checkbox-label {
+            color: var(--text-primary);
+        }
+
+        /* Strength Meter */
+        .strength-meter {
+            margin-top: 8px;
+        }
+
+        .strength-bar {
+            height: 4px;
+            background: var(--bg-tertiary);
+            border-radius: 2px;
+            overflow: hidden;
+            margin-bottom: 8px;
+        }
+
+        .strength-fill {
+            height: 100%;
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .strength-fill.weak { width: 25%; background: var(--danger); }
+        .strength-fill.fair { width: 50%; background: var(--warning); }
+        .strength-fill.good { width: 75%; background: #7bed9f; }
+        .strength-fill.strong { width: 100%; background: var(--success); }
+
+        .strength-text {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .strength-text strong {
+            color: var(--text-secondary);
+        }
+
+        /* Info Section */
+        .info-section {
+            margin-top: 48px;
+        }
+
+        .info-section h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: var(--text-primary);
+        }
+
+        .info-section p {
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+            font-weight: 300;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-top: 24px;
+        }
+
+        .feature-item {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .feature-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--accent-dim);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 12px;
+        }
+
+        .feature-icon svg {
+            width: 20px;
+            height: 20px;
+            stroke: var(--accent);
+        }
+
+        .feature-item h3 {
+            font-size: 1rem;
+            font-weight: 500;
+            margin-bottom: 6px;
+        }
+
+        .feature-item p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin: 0;
+        }
+
+        /* Footer */
+        footer {
+            margin-top: 64px;
+            padding-top: 32px;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+        }
+
+        footer p {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        footer a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        footer a:hover {
+            color: var(--accent);
+        }
+
+        /* Toast notification */
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            padding: 12px 24px;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            color: var(--text-primary);
+            opacity: 0;
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .container {
+                padding: 24px 16px;
+            }
+
+            .logo {
+                font-size: 2rem;
+            }
+
+            .generator-card {
+                padding: 24px 20px;
+            }
+
+            .password-text {
+                font-size: 1.1rem;
+            }
+
+            .checkbox-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .password-actions {
+                flex-direction: column;
+            }
+        }
+    </style>
 </head>
 <body>
-    <h1>xoldr</h1>
-    <p>Password generator coming soon!</p>
+    <div class="container">
+        <header>
+            <h1 class="logo">xoldr</h1>
+            <p class="tagline">Secure Password Generator</p>
+        </header>
+
+        <main>
+            <div class="generator-card">
+                <div class="password-display" id="passwordDisplay">
+                    <div class="password-text" id="passwordText">Click Generate to create a password</div>
+                    <div class="password-actions">
+                        <button class="btn btn-primary" id="generateBtn">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                            </svg>
+                            Generate
+                        </button>
+                        <button class="btn btn-secondary" id="copyBtn">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                            </svg>
+                            Copy
+                        </button>
+                    </div>
+                </div>
+
+                <div class="strength-meter">
+                    <div class="strength-bar">
+                        <div class="strength-fill" id="strengthFill"></div>
+                    </div>
+                    <p class="strength-text">Strength: <strong id="strengthText">-</strong></p>
+                </div>
+
+                <div class="controls">
+                    <div class="control-group">
+                        <div class="control-label">
+                            <span>Password Length</span>
+                            <strong id="lengthValue">16</strong>
+                        </div>
+                        <input type="range" class="range-slider" id="lengthSlider" min="8" max="64" value="16">
+                    </div>
+
+                    <div class="control-group">
+                        <div class="control-label">
+                            <span>Include Characters</span>
+                        </div>
+                        <div class="checkbox-grid">
+                            <label class="checkbox-item active">
+                                <input type="checkbox" id="uppercase" checked>
+                                <div class="checkbox-box">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                                    </svg>
+                                </div>
+                                <span class="checkbox-label">Uppercase (A-Z)</span>
+                            </label>
+                            <label class="checkbox-item active">
+                                <input type="checkbox" id="lowercase" checked>
+                                <div class="checkbox-box">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                                    </svg>
+                                </div>
+                                <span class="checkbox-label">Lowercase (a-z)</span>
+                            </label>
+                            <label class="checkbox-item active">
+                                <input type="checkbox" id="numbers" checked>
+                                <div class="checkbox-box">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                                    </svg>
+                                </div>
+                                <span class="checkbox-label">Numbers (0-9)</span>
+                            </label>
+                            <label class="checkbox-item active">
+                                <input type="checkbox" id="symbols" checked>
+                                <div class="checkbox-box">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                                    </svg>
+                                </div>
+                                <span class="checkbox-label">Symbols (!@#$%)</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <section class="info-section">
+                <h2>Why Use a Password Generator?</h2>
+                <p>Strong passwords are your first line of defense against hackers. A randomly generated password is virtually impossible to guess, unlike passwords based on personal information or common words.</p>
+                
+                <div class="features-grid">
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                            </svg>
+                        </div>
+                        <h3>Secure Generation</h3>
+                        <p>Uses cryptographic randomness for truly unpredictable passwords.</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                            </svg>
+                        </div>
+                        <h3>100% Local</h3>
+                        <p>Passwords are generated in your browser. Nothing is sent to any server.</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                            </svg>
+                        </div>
+                        <h3>Instant Results</h3>
+                        <p>Generate strong passwords in milliseconds with one click.</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
+                            </svg>
+                        </div>
+                        <h3>Customizable</h3>
+                        <p>Control length and character types to meet any requirements.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="info-section">
+                <h2>Tips for Password Security</h2>
+                <p>Use a unique password for every account. Consider using a password manager like Bitwarden, 1Password, or NordPass to keep track of them all securely. Enable two-factor authentication whenever possible for an extra layer of protection.</p>
+            </section>
+        </main>
+
+        <footer>
+            <p>&copy; 2026 xoldr. <a href="privacy.html">Privacy Policy</a></p>
+        </footer>
+    </div>
+
+    <div class="toast" id="toast">Password copied to clipboard!</div>
+
+    <script>
+        // Character sets
+        const charSets = {
+            uppercase: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
+            lowercase: 'abcdefghijklmnopqrstuvwxyz',
+            numbers: '0123456789',
+            symbols: '!@#$%^&*()_+-=[]{}|;:,.<>?'
+        };
+
+        // DOM elements
+        const passwordText = document.getElementById('passwordText');
+        const passwordDisplay = document.getElementById('passwordDisplay');
+        const generateBtn = document.getElementById('generateBtn');
+        const copyBtn = document.getElementById('copyBtn');
+        const lengthSlider = document.getElementById('lengthSlider');
+        const lengthValue = document.getElementById('lengthValue');
+        const strengthFill = document.getElementById('strengthFill');
+        const strengthText = document.getElementById('strengthText');
+        const toast = document.getElementById('toast');
+
+        // Checkbox elements
+        const checkboxes = {
+            uppercase: document.getElementById('uppercase'),
+            lowercase: document.getElementById('lowercase'),
+            numbers: document.getElementById('numbers'),
+            symbols: document.getElementById('symbols')
+        };
+
+        // Update checkbox UI
+        Object.keys(checkboxes).forEach(key => {
+            checkboxes[key].addEventListener('change', function() {
+                const item = this.closest('.checkbox-item');
+                item.classList.toggle('active', this.checked);
+                generatePassword();
+            });
+        });
+
+        // Update length display
+        lengthSlider.addEventListener('input', function() {
+            lengthValue.textContent = this.value;
+            generatePassword();
+        });
+
+        // Generate password using crypto API
+        function generatePassword() {
+            let charset = '';
+            
+            if (checkboxes.uppercase.checked) charset += charSets.uppercase;
+            if (checkboxes.lowercase.checked) charset += charSets.lowercase;
+            if (checkboxes.numbers.checked) charset += charSets.numbers;
+            if (checkboxes.symbols.checked) charset += charSets.symbols;
+
+            if (charset === '') {
+                passwordText.textContent = 'Select at least one character type';
+                strengthFill.className = 'strength-fill';
+                strengthText.textContent = '-';
+                return;
+            }
+
+            const length = parseInt(lengthSlider.value);
+            let password = '';
+            
+            // Use crypto.getRandomValues for secure randomness
+            const array = new Uint32Array(length);
+            crypto.getRandomValues(array);
+            
+            for (let i = 0; i < length; i++) {
+                password += charset[array[i] % charset.length];
+            }
+
+            passwordText.textContent = password;
+            updateStrength(password, charset.length);
+        }
+
+        // Calculate and display password strength
+        function updateStrength(password, charsetSize) {
+            const length = password.length;
+            const entropy = Math.log2(Math.pow(charsetSize, length));
+            
+            let strength, className;
+            
+            if (entropy < 40) {
+                strength = 'Weak';
+                className = 'weak';
+            } else if (entropy < 60) {
+                strength = 'Fair';
+                className = 'fair';
+            } else if (entropy < 80) {
+                strength = 'Good';
+                className = 'good';
+            } else {
+                strength = 'Strong';
+                className = 'strong';
+            }
+
+            strengthFill.className = 'strength-fill ' + className;
+            strengthText.textContent = strength;
+        }
+
+        // Copy to clipboard
+        async function copyPassword() {
+            const password = passwordText.textContent;
+            
+            if (password === 'Click Generate to create a password' || password === 'Select at least one character type') {
+                return;
+            }
+
+            try {
+                await navigator.clipboard.writeText(password);
+                passwordDisplay.classList.add('copied');
+                showToast();
+                
+                setTimeout(() => {
+                    passwordDisplay.classList.remove('copied');
+                }, 1000);
+            } catch (err) {
+                // Fallback for older browsers
+                const textarea = document.createElement('textarea');
+                textarea.value = password;
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+                showToast();
+            }
+        }
+
+        // Show toast notification
+        function showToast() {
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 2000);
+        }
+
+        // Event listeners
+        generateBtn.addEventListener('click', generatePassword);
+        copyBtn.addEventListener('click', copyPassword);
+
+        // Generate initial password on page load
+        generatePassword();
+    </script>
 </body>
 </html>
