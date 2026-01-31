@@ -8,6 +8,11 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4612876892455442"
+     crossorigin="anonymous"></script>
+    
     <style>
         :root {
             --bg-primary: #0a0a0b;
@@ -39,7 +44,6 @@
             line-height: 1.6;
         }
 
-        /* Subtle grid background */
         body::before {
             content: '';
             position: fixed;
@@ -63,7 +67,6 @@
             z-index: 1;
         }
 
-        /* Header */
         header {
             text-align: center;
             margin-bottom: 50px;
@@ -86,7 +89,6 @@
             font-weight: 300;
         }
 
-        /* Generator Card */
         .generator-card {
             background: var(--bg-secondary);
             border: 1px solid var(--border-color);
@@ -95,7 +97,6 @@
             margin-bottom: 32px;
         }
 
-        /* Password Display */
         .password-display {
             background: var(--bg-primary);
             border: 1px solid var(--border-color);
@@ -184,7 +185,6 @@
             height: 18px;
         }
 
-        /* Controls */
         .controls {
             display: flex;
             flex-direction: column;
@@ -214,7 +214,6 @@
             font-size: 1rem;
         }
 
-        /* Range Slider */
         .range-slider {
             -webkit-appearance: none;
             appearance: none;
@@ -251,7 +250,6 @@
             border: none;
         }
 
-        /* Checkboxes */
         .checkbox-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -324,7 +322,6 @@
             color: var(--text-primary);
         }
 
-        /* Strength Meter */
         .strength-meter {
             margin-top: 8px;
         }
@@ -357,7 +354,18 @@
             color: var(--text-secondary);
         }
 
-        /* Info Section */
+        .ad-container {
+            margin: 32px 0;
+            min-height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
         .info-section {
             margin-top: 48px;
         }
@@ -418,7 +426,6 @@
             margin: 0;
         }
 
-        /* Footer */
         footer {
             margin-top: 64px;
             padding-top: 32px;
@@ -441,7 +448,6 @@
             color: var(--accent);
         }
 
-        /* Toast notification */
         .toast {
             position: fixed;
             bottom: 24px;
@@ -463,7 +469,6 @@
             opacity: 1;
         }
 
-        /* Responsive */
         @media (max-width: 600px) {
             .container {
                 padding: 24px 16px;
@@ -580,6 +585,19 @@
                 </div>
             </div>
 
+            <!-- Ad Placement 1: After Generator -->
+            <div class="ad-container">
+                <ins class="adsbygoogle"
+                     style="display:block"
+                     data-ad-client="ca-pub-4612876892455442"
+                     data-ad-slot="auto"
+                     data-ad-format="auto"
+                     data-full-width-responsive="true"></ins>
+                <script>
+                     (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
+            </div>
+
             <section class="info-section">
                 <h2>Why Use a Password Generator?</h2>
                 <p>Strong passwords are your first line of defense against hackers. A randomly generated password is virtually impossible to guess, unlike passwords based on personal information or common words.</p>
@@ -624,6 +642,19 @@
                 </div>
             </section>
 
+            <!-- Ad Placement 2: Between Sections -->
+            <div class="ad-container">
+                <ins class="adsbygoogle"
+                     style="display:block"
+                     data-ad-client="ca-pub-4612876892455442"
+                     data-ad-slot="auto"
+                     data-ad-format="auto"
+                     data-full-width-responsive="true"></ins>
+                <script>
+                     (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
+            </div>
+
             <section class="info-section">
                 <h2>Tips for Password Security</h2>
                 <p>Use a unique password for every account. Consider using a password manager like Bitwarden, 1Password, or NordPass to keep track of them all securely. Enable two-factor authentication whenever possible for an extra layer of protection.</p>
@@ -638,7 +669,6 @@
     <div class="toast" id="toast">Password copied to clipboard!</div>
 
     <script>
-        // Character sets
         const charSets = {
             uppercase: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
             lowercase: 'abcdefghijklmnopqrstuvwxyz',
@@ -646,7 +676,6 @@
             symbols: '!@#$%^&*()_+-=[]{}|;:,.<>?'
         };
 
-        // DOM elements
         const passwordText = document.getElementById('passwordText');
         const passwordDisplay = document.getElementById('passwordDisplay');
         const generateBtn = document.getElementById('generateBtn');
@@ -657,7 +686,6 @@
         const strengthText = document.getElementById('strengthText');
         const toast = document.getElementById('toast');
 
-        // Checkbox elements
         const checkboxes = {
             uppercase: document.getElementById('uppercase'),
             lowercase: document.getElementById('lowercase'),
@@ -665,7 +693,6 @@
             symbols: document.getElementById('symbols')
         };
 
-        // Update checkbox UI
         Object.keys(checkboxes).forEach(key => {
             checkboxes[key].addEventListener('change', function() {
                 const item = this.closest('.checkbox-item');
@@ -674,13 +701,11 @@
             });
         });
 
-        // Update length display
         lengthSlider.addEventListener('input', function() {
             lengthValue.textContent = this.value;
             generatePassword();
         });
 
-        // Generate password using crypto API
         function generatePassword() {
             let charset = '';
             
@@ -699,7 +724,6 @@
             const length = parseInt(lengthSlider.value);
             let password = '';
             
-            // Use crypto.getRandomValues for secure randomness
             const array = new Uint32Array(length);
             crypto.getRandomValues(array);
             
@@ -711,7 +735,6 @@
             updateStrength(password, charset.length);
         }
 
-        // Calculate and display password strength
         function updateStrength(password, charsetSize) {
             const length = password.length;
             const entropy = Math.log2(Math.pow(charsetSize, length));
@@ -736,7 +759,6 @@
             strengthText.textContent = strength;
         }
 
-        // Copy to clipboard
         async function copyPassword() {
             const password = passwordText.textContent;
             
@@ -753,7 +775,6 @@
                     passwordDisplay.classList.remove('copied');
                 }, 1000);
             } catch (err) {
-                // Fallback for older browsers
                 const textarea = document.createElement('textarea');
                 textarea.value = password;
                 document.body.appendChild(textarea);
@@ -764,7 +785,6 @@
             }
         }
 
-        // Show toast notification
         function showToast() {
             toast.classList.add('show');
             setTimeout(() => {
@@ -772,11 +792,9 @@
             }, 2000);
         }
 
-        // Event listeners
         generateBtn.addEventListener('click', generatePassword);
         copyBtn.addEventListener('click', copyPassword);
 
-        // Generate initial password on page load
         generatePassword();
     </script>
 </body>
