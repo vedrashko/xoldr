@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About - xoldr</title>
+    <meta name="description" content="Learn about xoldr, a free secure password generator built with privacy in mind.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-VEEXWXF42Y"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-VEEXWXF42Y');
+    </script>
+    
+    <style>
+        :root {
+            --bg-primary: #0a0a0b;
+            --bg-secondary: #111113;
+            --bg-tertiary: #1a1a1d;
+            --border-color: #2a2a2d;
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0a5;
+            --text-muted: #606065;
+            --accent: #00d4aa;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.7;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .container {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        header {
+            margin-bottom: 40px;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            margin-bottom: 8px;
+        }
+
+        .logo a {
+            text-decoration: none;
+            background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        h1 {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .content {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 32px;
+        }
+
+        h2 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-top: 32px;
+            margin-bottom: 12px;
+            color: var(--text-primary);
+        }
+
+        h2:first-child {
+            margin-top: 0;
+        }
+
+        p {
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+            font-weight: 300;
+        }
+
+        ul {
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+            padding-left: 24px;
+        }
+
+        li {
+            margin-bottom: 8px;
+            font-weight: 300;
+        }
+
+        a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .highlight-box {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 24px 0;
+        }
+
+        .highlight-box h3 {
+            font-size: 1rem;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: var(--accent);
+        }
+
+        .highlight-box p {
+            margin-bottom: 0;
+        }
+
+        footer {
+            margin-top: 48px;
+            padding-top: 24px;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+        }
+
+        footer p {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        footer a {
+            color: var(--text-secondary);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 24px;
+            margin-top: 16px;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 24px 16px;
+            }
+
+            .content {
+                padding: 24px 20px;
+            }
+
+            h1 {
+                font-size: 1.75rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo"><a href="/">xoldr</a></div>
+            <h1>About Us</h1>
+        </header>
+
+        <main class="content">
+            <h2>Our Mission</h2>
+            <p>xoldr was created with a simple goal: to provide everyone with a free, secure, and easy-to-use password generator. In an age where cyber threats are constantly evolving, strong passwords are your first line of defense against hackers and data breaches.</p>
+
+            <h2>What We Do</h2>
+            <p>We offer a powerful password generation tool that creates cryptographically secure passwords right in your browser. Our generator uses the Web Crypto API to ensure true randomness, making your passwords virtually impossible to guess or crack.</p>
+
+            <div class="highlight-box">
+                <h3>100% Privacy Focused</h3>
+                <p>Your passwords never leave your device. All generation happens locally in your browser — we never see, store, or transmit any passwords you create.</p>
+            </div>
+
+            <h2>Why Choose xoldr?</h2>
+            <ul>
+                <li><strong>Secure:</strong> Uses cryptographic randomness for truly unpredictable passwords</li>
+                <li><strong>Private:</strong> Everything runs locally — no data is sent to servers</li>
+                <li><strong>Free:</strong> No signup, no fees, no limitations</li>
+                <li><strong>Simple:</strong> Clean interface that anyone can use</li>
+                <li><strong>Customizable:</strong> Control length and character types to meet any requirements</li>
+            </ul>
+
+            <h2>Our Commitment</h2>
+            <p>We believe that online security should be accessible to everyone. That's why xoldr is completely free to use, with no hidden costs or premium features locked behind paywalls. We're committed to maintaining a fast, reliable, and ad-supported service that puts your security first.</p>
+
+            <p>Have questions or feedback? We'd love to hear from you. Visit our <a href="contact.html">Contact page</a> to get in touch.</p>
+        </main>
+
+        <footer>
+            <p>&copy; 2026 xoldr. <a href="/">Home</a> · <a href="privacy.html">Privacy Policy</a> · <a href="contact.html">Contact</a></p>
+        </footer>
+    </div>
+</body>
+</html>
