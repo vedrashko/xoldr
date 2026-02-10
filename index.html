@@ -435,6 +435,51 @@
             margin: 0;
         }
 
+        .blog-section {
+            margin-top: 48px;
+        }
+
+        .blog-section h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+        }
+
+        .blog-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .blog-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .blog-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-2px);
+        }
+
+        .blog-card h3 {
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .blog-card p {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin: 0;
+            font-weight: 300;
+        }
+
         footer {
             margin-top: 64px;
             padding-top: 32px;
@@ -667,6 +712,24 @@
             <section class="info-section">
                 <h2>Tips for Password Security</h2>
                 <p>Use a unique password for every account. Consider using a password manager like Bitwarden, 1Password, or NordPass to keep track of them all securely. Enable two-factor authentication whenever possible for an extra layer of protection.</p>
+            </section>
+
+            <section class="blog-section">
+                <h2>Learn More About Password Security</h2>
+                <div class="blog-grid">
+                    <a href="blog-strong-password.html" class="blog-card">
+                        <h3>How to Create a Strong Password in 2026</h3>
+                        <p>Expert tips on creating passwords that hackers can't crack. Learn what makes a password truly secure.</p>
+                    </a>
+                    <a href="blog-password-managers.html" class="blog-card">
+                        <h3>Are Password Managers Safe?</h3>
+                        <p>Everything you need to know about password managers — how they work and why experts recommend them.</p>
+                    </a>
+                    <a href="blog-change-passwords.html" class="blog-card">
+                        <h3>How Often Should You Change Your Passwords?</h3>
+                        <p>The old 90-day rule is outdated. Learn when you actually need to change your passwords.</p>
+                    </a>
+                </div>
             </section>
         </main>
 
